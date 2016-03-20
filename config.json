@@ -1,0 +1,36 @@
+{
+	"disabled": [
+		"exe:electron.exe"
+	],
+	"actions": {
+		"default": {
+			"↓→": ["shortcut", "MENU + F4"]
+		},
+		"exe:explorer.exe": ["extend", { }, "default", {
+			"←": ["shortcut", "MENU + LEFT"],
+			"→": ["shortcut", "MENU + RIGHT"],
+			"↑": ["shortcut", "BACK"]
+		}],
+		"browser": {
+			"←": ["shortcut", "MENU + LEFT"],
+			"→": ["shortcut", "MENU + RIGHT"],
+			"↑": ["shortcut", "ESCAPE"],
+			"↓": ["shortcut", "CONTROL + B"],
+			"↓→": ["shortcut", "CONTROL + F4"],
+			"↓←": ["shortcut", "CONTROL + T"],
+			"↑↓": ["shortcut", "F5"],
+			"↑←": ["shortcut", "CONTROL + SHIFT + TAB"],
+			"↑→": ["shortcut", "CONTROL + TAB"],
+			"↘": ["shortcut", "CONTROL + J"]
+		},
+		"cls:MozillaWindowClass": ["extend", { }, "browser", {
+			"↓↑": ["shortcut", "CONTROL + SHIFT + I"]
+		}],
+		"exe:chrome.exe": ["extend", { }, "browser", {
+			"↓↑": ["shortcut", "CONTROL + SHIFT + J"]
+		}],
+		"exe:MicrosoftEdge.exe": ["extend", { }, "browser", {
+			"↓↑": ["shortcut", "F12"]
+		}]
+	}
+}

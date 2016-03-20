@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<style>
+	body {
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+	}
+	a {
+		text-decoration: none;
+	}
+	a:hover {
+		text-decoration: underline;
+	}
+	.ui {
+		position: absolute;
+		width: 100%;
+		padding: 5px;
+	}
+</style>
+</head>
+<body>
+<div class="ui">
+	<div>window class:  <a href="javascript:void(0)" id="windowClass">...</a></div>
+	<div>exe file name: <a href="javascript:void(0)" id="exeFileName">...</a></div>
+	<button onclick="location.reload()">reload</button>
+	<button onclick="mainWindow.openDevTools()">dev tools</button>
+</div>
+<canvas id="cv"></canvas>
+<script>
+
+var canvas = document.getElementById('cv'),
+	dc = canvas.getContext('2d')
+
+window.addEventListener('resize', canvas.init = function() {
+	canvas.width = window.innerWidth
+	canvas.height = window.innerHeight
+	canvas.style.background = '#eee'
+
+	dc.font = '30px Arial'
+	dc.strokeStyle = 'rgba(0,128,255,0.5)'
+	dc.fillStyle = 'rgba(0, 0, 0, 0.5)'
+	dc.lineWidth = 3
+})
+
+canvas.init()
+
+</script>
+<script>
+
+const ipcRenderer = require('electron').ipcRenderer,
+	mainWindow = require('remote').getCurrentWindow()
+
+ipcRenderer.on('hook-mousedown', function onMouseDown(e, x, y, w) {
+	dc.offset = { x: canvas.width/2 - x, y: canvas.height/2 - y }
+	dc.lastPoint = { x, y }
+	dc.clearRect(0, 0, canvas.width, canvas.height)
+
+	document.getElementById('windowClass').innerText = w.windowClass
+	document.getElementById('exeFileName').innerText = w.exeFileName
+})
+
+ipcRenderer.on('hook-mousemove', function onMouseMove(e, x, y) {
+	var o = dc.offset, p = dc.lastPoint
+	dc.beginPath()
+	dc.moveTo(p.x + o.x, p.y + o.y)
+	dc.lineTo(x   + o.x, y   + o.y)
+	dc.stroke()
+	dc.closePath()
+	dc.lastPoint = { x, y }
+})
+
+ipcRenderer.on('hook-mouseup', function onMouseMove(e, pts, str) {
+	var o = dc.offset
+	dc.beginPath();
+	pts.forEach((p, i) => {
+		dc.arc(p.x + o.x, p.y + o.y, 5, 0, 2*Math.PI);
+		dc.fillText(i, p.x + o.x, p.y + o.y);
+	});
+	dc.closePath();
+	dc.fill();
+	dc.fillText(str, 20, canvas.height - 20);
+})
+
+</script>
+</body>
+</html>
