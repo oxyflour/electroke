@@ -22,12 +22,6 @@
 </style>
 </head>
 <body>
-<div class="ui">
-	<div>window class:  <a href="javascript:void(0)" id="windowClass">...</a></div>
-	<div>exe file name: <a href="javascript:void(0)" id="exeFileName">...</a></div>
-	<button onclick="location.reload()">reload</button>
-	<button onclick="mainWindow.openDevTools()">dev tools</button>
-</div>
 <canvas id="cv"></canvas>
 <script>
 
@@ -43,6 +37,13 @@ window.addEventListener('resize', canvas.init = function() {
 	dc.strokeStyle = 'rgba(0,128,255,0.5)'
 	dc.fillStyle = 'rgba(0, 0, 0, 0.5)'
 	dc.lineWidth = 3
+
+	dc.save()
+	dc.font = '50px Arial'
+	dc.textBaseline = 'middle'
+	dc.textAlign = 'center'
+	dc.fillText('STRIKE!', canvas.width / 2, canvas.height / 2)
+	dc.restore()
 })
 
 canvas.init()
@@ -58,8 +59,10 @@ ipcRenderer.on('hook-mousedown', function onMouseDown(e, x, y, w) {
 	dc.lastPoint = { x, y }
 	dc.clearRect(0, 0, canvas.width, canvas.height)
 
-	document.getElementById('windowClass').innerText = w.windowClass
-	document.getElementById('exeFileName').innerText = w.exeFileName
+	dc.save()
+	dc.font = '15px Arial'
+	dc.fillText(w.windowClass + ' : ' + w.exeFileName, 10, 25)
+	dc.restore()
 })
 
 ipcRenderer.on('hook-mousemove', function onMouseMove(e, x, y) {
