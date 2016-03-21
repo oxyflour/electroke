@@ -6,47 +6,52 @@ const app = require('app'),
 var mainWindow = null,
 	sysTray = null
 
-app.on('ready', function() {
-	mainWindow = new BrowserWindow({
+function createWindow() {
+	var window = new BrowserWindow({
 		width: 640,
 		height: 480,
+		minimizable: false,
 		icon: __dirname + '/../res/icon.png',
 	})
-	mainWindow.on('minimize', function() {
-		mainWindow.setSkipTaskbar(true)
+	window.on('closed', function() {
+		window.closed = true
 	})
-	mainWindow.on('restore', function() {
-		mainWindow.setSkipTaskbar(false)
-	})
-	mainWindow.on('closed', function() {
-		// do not use app.on('all-window-close')
-		app.quit()
-	})
-	mainWindow.setMenu(null)
-	mainWindow.loadURL('file://' + __dirname + '/../res/index.html')
+	window.setMenu(null)
+	window.loadURL('file://' + __dirname + '/../res/index.html')
+	return window
+}
 
+app.on('window-all-closed', function() {
+	// keep it running in the tray 
+})
+
+app.on('ready', function() {
 	sysTray = new Tray(__dirname + '/../res/icon.png')
-	sysTray.setToolTip('click to restore main window')
+	sysTray.setToolTip('click to show')
 	sysTray.setContextMenu(Menu.buildFromTemplate([
 		{
-			label: 'restore',
-			click(e) { mainWindow.restore() },
+			label: 'show',
+			click(e) {
+				if (!mainWindow || mainWindow.closed)
+					mainWindow = createWindow()
+			},
 		},
 		{
 			label: 'exit',
-			click(e) { app.quit() },
+			click(e) {
+				app.quit()
+			},
 		},
 	]))
 	sysTray.on('click', function() {
-		mainWindow.isMinimized() ? mainWindow.restore() : mainWindow.minimize()
+		if (!mainWindow || mainWindow.closed)
+			mainWindow = createWindow()
 	})
 })
 
 module.exports = {
-	getWindow: () => mainWindow,
-	getTray: () => sysTray,
 	sendMsg: function() {
-		var web = mainWindow && mainWindow.webContents
+		var web = mainWindow && !mainWindow.closed && mainWindow.webContents
 		web && web.send.apply(web, arguments)
 	},
 }
