@@ -15,7 +15,7 @@ const env = {
 	},
 	click(button, keys) {
 		var pt = this.pts[0]
-		button = { LEFT:0, RIGHT:1, MIDDLE:2 }[button.toUpperCase()]
+		button = button.toUpperCase()
 		keys = keys ? keys.toUpperCase().replace(/\s/g, '').split('+') : []
 		setTimeout(() => keys.forEach(k => helper.simulateKey(k, true)),  0)
 		setTimeout(() => helper.simulateMouseMove(pt.x, pt.y),            0)

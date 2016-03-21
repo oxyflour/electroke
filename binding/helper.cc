@@ -22,6 +22,8 @@ using v8::Persistent;
 
 using std::string;
 
+using Nan::Utf8String;
+
 std::map<string, WORD> VKCODES = {
 	// from https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
 	{ "LBUTTON", 0x01 },
@@ -215,20 +217,20 @@ UINT SimulateKey(WORD vk, DWORD flags) {
 }
 
 void simulateMouseKey(const FunctionCallbackInfo<Value>& args) {
-	auto button = args[0]->Int32Value();
+	auto button = string(*Utf8String(args[0]));
 	auto isDown = args[1]->BooleanValue();
 
 	DWORD buttonDownFlag = 0;
 	DWORD buttonUpFlag   = 0;
-	if (button == 0) {
+	if (button.compare("LEFT") == 0) {
 		buttonDownFlag	|= MOUSEEVENTF_LEFTDOWN;
 		buttonUpFlag	|= MOUSEEVENTF_LEFTUP;
 	}
-	else if (button == 1) {
+	else if (button.compare("RIGHT") == 0) {
 		buttonDownFlag 	|= MOUSEEVENTF_RIGHTDOWN;
 		buttonUpFlag 	|= MOUSEEVENTF_RIGHTUP;
 	}
-	else if (button == 2) {
+	else if (button.compare("MIDDLE") == 0) {
 		buttonDownFlag 	|= MOUSEEVENTF_MIDDLEDOWN;
 		buttonUpFlag 	|= MOUSEEVENTF_MIDDLEUP;
 	}
@@ -252,7 +254,7 @@ void simulateMouseMove(const FunctionCallbackInfo<Value>& args) {
 }
 
 void simulateKey(const FunctionCallbackInfo<Value>& args) {
-	auto vkCode = VKCODES[*Nan::Utf8String(args[0])];
+	auto vkCode = VKCODES[*Utf8String(args[0])];
 	auto isDown = args[1]->BooleanValue();
 	if (vkCode > 0)
 		SimulateKey(vkCode, isDown ? 0 : KEYEVENTF_KEYUP);

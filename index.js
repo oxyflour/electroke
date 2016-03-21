@@ -27,6 +27,7 @@ hook.on('mousedown', function(x, y) {
 
 	startPosition = { x, y }
 	startWindow = helper.queryWindowAt(x, y)
+
 	gui.sendMsg('hook-mousedown', x, y, startWindow)
 })
 
@@ -46,13 +47,12 @@ hook.on('mouseup', function(x, y) {
 			actions['default'] || { }, str, pts, actions)
 	}
 	else {
-		var MOUSE_BUTTON_RIGHT = 1
-		setTimeout(() => helper.simulateMouseKey(MOUSE_BUTTON_RIGHT, true),  10)
-		setTimeout(() => helper.simulateMouseKey(MOUSE_BUTTON_RIGHT, false), 20)
+		setTimeout(() => helper.simulateMouseKey('RIGHT', true),  10)
+		setTimeout(() => helper.simulateMouseKey('RIGHT', false), 20)
 	}
 
-	gui.sendMsg('hook-mouseup', pts, str)
 	console.log('[i] ' + str)
+	gui.sendMsg('hook-mouseup', pts, str)
 })
 
 hook.on('mousemove', function(x, y) {
