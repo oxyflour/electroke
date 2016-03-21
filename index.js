@@ -1,21 +1,35 @@
-const hook = require('./bin/hook'),
+const fs = require('fs'),
+	hook = require('./bin/hook'),
 	helper = require('./bin/helper'),
+	gui = require('./src/gui'),
 	GestureParser = require('./src/gesture')
 	executeAction = require('./src/action')
 
-var config = { }
-try {
-	config = require(__dirname + '/config.json')
-}
-catch (e) {
-	console.log('[x] load ' + __dirname + '/config.json failed')
+function getConfig() {
+	var configPath = process.env.USERPROFILE + '\\elt-config.json'
+		config = { }
+	try {
+		config = require(configPath)
+		console.log('[i] load "' + configPath + '" ok')
+	}
+	catch (e) {
+		console.log('[x] load "' + configPath + '" failed')
+		var defConfigPath = __dirname + '/res/config.json',
+			jsonText = fs.readFileSync(defConfigPath)
+		config = JSON.parse(jsonText)
+		try {
+			fs.writeFileSync(configPath, jsonText)
+			console.log('[i] write "' + configPath + '" with default config ok')
+		}
+		catch (e) {
+			console.log('[x] write "' + configPath + '" failed')
+		}
+	}
+	return config
 }
 
-var gui = process.versions['electron'] ? require('./src/gui') : {
-	sendMsg() { }
-}
-
-var gesture,
+var config = getConfig(),
+	gesture,
 	startPosition,
 	startWindow
 
@@ -51,7 +65,7 @@ hook.on('mouseup', function(x, y) {
 		setTimeout(() => helper.simulateMouseKey('RIGHT', false), 20)
 	}
 
-	console.log('[i] ' + str)
+	console.log('[i] performed gesture "' + str + '"')
 	gui.sendMsg('hook-mouseup', pts, str)
 })
 

@@ -1,5 +1,7 @@
 {
 	"disabled": [
+		"exe:some-file-name.exe",
+		"cls:some-window-class"
 	],
 	"actions": {
 		"default": {
