@@ -43,12 +43,12 @@ hook.on('mouseup', function(x, y) {
 		executeAction(
 			actions['cls:' + cls] ||
 			actions['exe:' + exe] ||
-			actions['default'] || { }, str, actions)
+			actions['default'] || { }, str, pts, actions)
 	}
 	else {
 		var MOUSE_BUTTON_RIGHT = 1
-		setTimeout(() => helper.simulateMouse(x, y, MOUSE_BUTTON_RIGHT, true),  10)
-		setTimeout(() => helper.simulateMouse(x, y, MOUSE_BUTTON_RIGHT, false), 20)
+		setTimeout(() => helper.simulateMouseKey(MOUSE_BUTTON_RIGHT, true),  10)
+		setTimeout(() => helper.simulateMouseKey(MOUSE_BUTTON_RIGHT, false), 20)
 	}
 
 	gui.sendMsg('hook-mouseup', pts, str)

@@ -1,6 +1,5 @@
 {
 	"disabled": [
-		"exe:electron.exe"
 	],
 	"actions": {
 		"default": {
@@ -21,16 +20,17 @@
 			"↑↓": ["shortcut", "F5"],
 			"↑←": ["shortcut", "CONTROL + SHIFT + TAB"],
 			"↑→": ["shortcut", "CONTROL + TAB"],
-			"↘": ["shortcut", "CONTROL + J"]
+			"↘": ["shortcut", "CONTROL + J"],
+			"↓↑": ["click", "MIDDLE"]
 		},
 		"cls:MozillaWindowClass": ["extend", { }, "browser", {
-			"↓↑": ["shortcut", "CONTROL + SHIFT + I"]
+			"↙": ["shortcut", "CONTROL + SHIFT + I"]
 		}],
 		"exe:chrome.exe": ["extend", { }, "browser", {
-			"↓↑": ["shortcut", "CONTROL + SHIFT + J"]
+			"↙": ["shortcut", "CONTROL + SHIFT + J"]
 		}],
 		"exe:MicrosoftEdge.exe": ["extend", { }, "browser", {
-			"↓↑": ["shortcut", "F12"]
+			"↙": ["shortcut", "F12"]
 		}]
 	}
 }

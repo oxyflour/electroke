@@ -214,14 +214,12 @@ UINT SimulateKey(WORD vk, DWORD flags) {
 	return SendInput(1, &ip, sizeof(INPUT));
 }
 
-void simulateMouse(const FunctionCallbackInfo<Value>& args) {
-	auto x = args[0]->Int32Value();
-	auto y = args[1]->Int32Value();
-	auto button = args[2]->Int32Value();
-	auto isDown = args[3]->BooleanValue();
+void simulateMouseKey(const FunctionCallbackInfo<Value>& args) {
+	auto button = args[0]->Int32Value();
+	auto isDown = args[1]->BooleanValue();
 
-	DWORD buttonDownFlag = MOUSEEVENTF_ABSOLUTE;
-	DWORD buttonUpFlag   = MOUSEEVENTF_ABSOLUTE;
+	DWORD buttonDownFlag = 0;
+	DWORD buttonUpFlag   = 0;
 	if (button == 0) {
 		buttonDownFlag	|= MOUSEEVENTF_LEFTDOWN;
 		buttonUpFlag	|= MOUSEEVENTF_LEFTUP;
@@ -230,11 +228,27 @@ void simulateMouse(const FunctionCallbackInfo<Value>& args) {
 		buttonDownFlag 	|= MOUSEEVENTF_RIGHTDOWN;
 		buttonUpFlag 	|= MOUSEEVENTF_RIGHTUP;
 	}
+	else if (button == 2) {
+		buttonDownFlag 	|= MOUSEEVENTF_MIDDLEDOWN;
+		buttonUpFlag 	|= MOUSEEVENTF_MIDDLEUP;
+	}
 
 	if (isDown)
-		SimulateMouse(x, y, 0, buttonDownFlag);
+		SimulateMouse(0, 0, 0, buttonDownFlag);
 	else
-		SimulateMouse(x, y, 0, buttonUpFlag);
+		SimulateMouse(0, 0, 0, buttonUpFlag);
+}	
+
+void simulateMouseMove(const FunctionCallbackInfo<Value>& args) {
+	auto x = args[0]->Int32Value();
+	auto y = args[1]->Int32Value();
+
+	RECT display;
+	SystemParametersInfo(SPI_GETWORKAREA, 0, &display, 0);
+	x = x * 65535 / (display.right - display.left);
+	y = y * 65535 / (display.bottom - display.top);
+
+	SimulateMouse(x, y, 0, MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE);
 }
 
 void simulateKey(const FunctionCallbackInfo<Value>& args) {
@@ -272,8 +286,9 @@ void queryWindowAt(const FunctionCallbackInfo<Value>& args) {
 }
 
 void init(Local<Object> target) {
-	NODE_SET_METHOD(target, "simulateMouse", simulateMouse);
 	NODE_SET_METHOD(target, "simulateKey", simulateKey);
+	NODE_SET_METHOD(target, "simulateMouseKey", simulateMouseKey);
+	NODE_SET_METHOD(target, "simulateMouseMove", simulateMouseMove);
 	NODE_SET_METHOD(target, "queryWindowAt", queryWindowAt);
 }
 
