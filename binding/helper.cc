@@ -245,10 +245,8 @@ void simulateMouseMove(const FunctionCallbackInfo<Value>& args) {
 	auto x = args[0]->Int32Value();
 	auto y = args[1]->Int32Value();
 
-	RECT display;
-	SystemParametersInfo(SPI_GETWORKAREA, 0, &display, 0);
-	x = x * 65535 / (display.right - display.left);
-	y = y * 65535 / (display.bottom - display.top);
+	x = x * 65535 / GetSystemMetrics(SM_CXSCREEN);
+	y = y * 65535 / GetSystemMetrics(SM_CYSCREEN);
 
 	SimulateMouse(x, y, 0, MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE);
 }
