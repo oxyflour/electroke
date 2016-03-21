@@ -1,5 +1,5 @@
-const hook = require('./build/hook'),
-	helper = require('./build/helper'),
+const hook = require('./bin/hook'),
+	helper = require('./bin/helper'),
 	GestureParser = require('./src/gesture')
 	executeAction = require('./src/action')
 

@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "node-gyp rebuild --target=0.37.2 --arch=x64 --dist-url=https://atom.io/download/atom-shell & build_asar",
+    "build": "node-gyp rebuild --target=0.37.2 --arch=x64 --dist-url=https://atom.io/download/atom-shell && asar pack . build/app.asar --unpack-dir build",
     "start": "electron ."
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "nan": "^2.2.0"
   }
 }

@@ -1,4 +1,4 @@
-var helper = require('../build/helper')
+var helper = require('../bin/helper')
 
 const env = {
 	extend(obj) {

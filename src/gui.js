@@ -2,7 +2,7 @@ const app = require('app'),
 	BrowserWindow = require('browser-window'),
 	Menu = require('menu'),
 	Tray = require('tray'),
-	hook = require('../build/hook')
+	hook = require('../bin/hook')
 
 var mainWindow = null,
 	sysTray = null
