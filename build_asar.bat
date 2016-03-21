@@ -1,6 +1,5 @@
 mkdir bin
 copy build\Release\*.node bin\ /Y
-rmdir /s /q build
-mkdir build
-move bin build\Release
+rmdir /s /q build\
+move bin build
 asar pack . build\app.asar

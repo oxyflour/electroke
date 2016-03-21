@@ -1,15 +1,7 @@
-const hook = require('./build/Release/hook'),
-	helper = require('./build/Release/helper'),
+const hook = require('./build/hook'),
+	helper = require('./build/helper'),
 	GestureParser = require('./src/gesture')
 	executeAction = require('./src/action')
-
-const MIN_MOVE_DIST = 2,
-	MOUSE_BUTTON_LEFT = 0,
-	MOUSE_BUTTON_RIGHT = 1
-
-var gui = process.versions['electron'] ? require('./src/gui') : {
-	sendMsg() { }
-}
 
 var config = { }
 try {
@@ -18,12 +10,16 @@ try {
 catch (e) {
 	console.log('[x] load ' + __dirname + '/config.json failed')
 }
-var disabled = config.disabled || [ ]
-disabled.forEach(prog => hook.disable(prog))
+
+var gui = process.versions['electron'] ? require('./src/gui') : {
+	sendMsg() { }
+}
 
 var gesture,
 	startPosition,
 	startWindow
+
+;(config.disabled || [ ]).forEach(prog => hook.disable(prog))
 
 hook.on('mousedown', function(x, y) {
 	gesture = new GestureParser()
@@ -50,6 +46,7 @@ hook.on('mouseup', function(x, y) {
 			actions['default'] || { }, str, actions)
 	}
 	else {
+		var MOUSE_BUTTON_RIGHT = 1
 		setTimeout(() => helper.simulateMouse(x, y, MOUSE_BUTTON_RIGHT, true),  10)
 		setTimeout(() => helper.simulateMouse(x, y, MOUSE_BUTTON_RIGHT, false), 20)
 	}
@@ -61,8 +58,9 @@ hook.on('mouseup', function(x, y) {
 hook.on('mousemove', function(x, y) {
 	gesture.add(x, y)
 
-	if (Math.abs(x - startPosition.x) > MIN_MOVE_DIST ||
-		Math.abs(y - startPosition.y) > MIN_MOVE_DIST)
+	var minTriggerDistance = config.minTriggerDistance || 2
+	if (Math.abs(x - startPosition.x) > minTriggerDistance ||
+		Math.abs(y - startPosition.y) > minTriggerDistance)
 		startPosition.hasMoved = true
 
 	gui.sendMsg('hook-mousemove', x, y)

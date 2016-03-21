@@ -1,7 +1,8 @@
 const app = require('app'),
 	BrowserWindow = require('browser-window'),
 	Menu = require('menu'),
-	Tray = require('tray')
+	Tray = require('tray'),
+	hook = require('../build/hook')
 
 var mainWindow = null,
 	sysTray = null
@@ -22,13 +23,25 @@ function createWindow() {
 }
 
 app.on('window-all-closed', function() {
-	// keep it running in the tray 
+	// keep it running in the tray
 })
 
 app.on('ready', function() {
 	sysTray = new Tray(__dirname + '/../res/icon.png')
-	sysTray.setToolTip('click to show')
-	sysTray.setContextMenu(Menu.buildFromTemplate([
+	var menuItems = [
+		{
+			label: 'enabled',
+			type: 'checkbox',
+			checked: true,
+			click(e) {
+				var item = menuItems[0]
+				item.checked = !item.checked
+				item.checked ? hook.enable('*') : hook.disable('*')
+				item.type = item.checked ? 'checkbox' : 'normal'
+				item.label = item.checked ? 'enabled' : 'disabled'
+				sysTray.setContextMenu(Menu.buildFromTemplate(menuItems))
+			},
+		},
 		{
 			label: 'show',
 			click(e) {
@@ -42,7 +55,9 @@ app.on('ready', function() {
 				app.quit()
 			},
 		},
-	]))
+	]
+	sysTray.setContextMenu(Menu.buildFromTemplate(menuItems))
+	sysTray.setToolTip('click to show')
 	sysTray.on('click', function() {
 		if (!mainWindow || mainWindow.closed)
 			mainWindow = createWindow()

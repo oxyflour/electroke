@@ -65,6 +65,8 @@ map<string, bool> DISABLED_CONDS = {
 
 BOOL IsEnabledAtPosition(POINT &pt) {
 	char szBuf[256];
+	if (DISABLED_CONDS.find("*") != DISABLED_CONDS.end())
+		return false;
 
 	HWND hWnd = WindowFromPoint(pt);
 	GetClassName(hWnd, szBuf, sizeof(szBuf));
@@ -134,13 +136,14 @@ void off(const FunctionCallbackInfo<Value>& args) {
 		cbs.erase(find);
 }
 
+void enable(const FunctionCallbackInfo<Value>& args) {
+	auto prog = *Utf8String(args[0]);
+	DISABLED_CONDS.erase(prog);
+}
+
 void disable(const FunctionCallbackInfo<Value>& args) {
 	auto prog = *Utf8String(args[0]);
-	auto enabled = args[1]->BooleanValue();
-	if (enabled)
-		DISABLED_CONDS.erase(prog);
-	else
-		DISABLED_CONDS[prog] = true;
+	DISABLED_CONDS[prog] = true;
 }
 
 void fire(uv_async_t *handle) {
@@ -207,6 +210,7 @@ void init(Local<Object> target) {
 
 	NODE_SET_METHOD(target, "on", on);
 	NODE_SET_METHOD(target, "off", off);
+	NODE_SET_METHOD(target, "enable", enable);
 	NODE_SET_METHOD(target, "disable", disable);
 }
 
