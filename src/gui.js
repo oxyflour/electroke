@@ -2,7 +2,8 @@ const app = require('app'),
 	BrowserWindow = require('browser-window'),
 	Menu = require('menu'),
 	Tray = require('tray'),
-	hook = require('../bin/hook')
+	hook = require('../bin/hook'),
+	config = require('./config')
 
 var mainWindow = null,
 	sysTray = null
@@ -41,6 +42,12 @@ app.on('ready', function() {
 				item.type = item.checked ? 'checkbox' : 'normal'
 				item.label = item.checked ? 'enabled' : 'disabled'
 				sysTray.setContextMenu(Menu.buildFromTemplate(menuItems))
+			},
+		},
+		{
+			label: 'reload',
+			click(e) {
+				config.reload()
 			},
 		},
 		{

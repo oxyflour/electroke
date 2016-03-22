@@ -1,39 +1,13 @@
-const fs = require('fs'),
-	hook = require('./bin/hook'),
+var hook = require('./bin/hook'),
 	helper = require('./bin/helper'),
 	gui = require('./src/gui'),
+	config = require('./src/config'),
 	GestureParser = require('./src/gesture')
 	executeAction = require('./src/action')
 
-function getConfig() {
-	var configPath = process.env.USERPROFILE + '\\elecnez-config.json'
-		config = { }
-	try {
-		config = require(configPath)
-		console.log('[i] load "' + configPath + '" ok')
-	}
-	catch (e) {
-		console.log('[x] load "' + configPath + '" failed')
-		var defConfigPath = __dirname + '/res/config.json',
-			jsonText = fs.readFileSync(defConfigPath)
-		config = JSON.parse(jsonText)
-		try {
-			fs.writeFileSync(configPath, jsonText)
-			console.log('[i] write "' + configPath + '" with default config ok')
-		}
-		catch (e) {
-			console.log('[x] write "' + configPath + '" failed')
-		}
-	}
-	return config
-}
-
-var config = getConfig(),
-	gesture,
+var gesture,
 	startPosition,
 	startWindow
-
-;(config.disabled || [ ]).forEach(prog => hook.disable(prog))
 
 hook.on('mousedown', function(x, y) {
 	gesture = new GestureParser()
