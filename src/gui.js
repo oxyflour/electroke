@@ -12,6 +12,7 @@ function createWindow() {
 		width: 480,
 		height: 360,
 		minimizable: false,
+		title: 'ElecNez',
 		icon: __dirname + '/../res/icon.png',
 	})
 	window.on('closed', function() {

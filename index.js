@@ -6,7 +6,7 @@ const fs = require('fs'),
 	executeAction = require('./src/action')
 
 function getConfig() {
-	var configPath = process.env.USERPROFILE + '\\elt-config.json'
+	var configPath = process.env.USERPROFILE + '\\elecnez-config.json'
 		config = { }
 	try {
 		config = require(configPath)

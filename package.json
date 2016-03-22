@@ -1,14 +1,14 @@
 {
-  "name": "elt",
-  "version": "1.0.0",
-  "description": "",
+  "name": "elecnez",
+  "version": "0.0.1",
+  "description": "electron-powered mouse (nezumi) gesture parser",
   "main": "index.js",
   "scripts": {
     "build": "node-gyp rebuild --target=0.37.2 --arch=x64 --dist-url=https://atom.io/download/atom-shell && asar pack . build/asar/app.asar --unpack-dir build",
     "start": "electron ."
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "nan": "^2.2.0"
   }

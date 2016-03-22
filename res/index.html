@@ -7,6 +7,7 @@
 		margin: 0;
 		padding: 0;
 		overflow: hidden;
+		background: #ddd;
 	}
 	a {
 		text-decoration: none;
@@ -14,39 +15,54 @@
 	a:hover {
 		text-decoration: underline;
 	}
-	.ui {
-		position: absolute;
-		width: 100%;
-		padding: 5px;
+	#icon {
+		display: none;
 	}
 </style>
 </head>
 <body>
+<img id="icon" />
 <canvas id="cv"></canvas>
 <script>
 
 var canvas = document.getElementById('cv'),
-	dc = canvas.getContext('2d')
+	dc = canvas.getContext('2d'),
+	icon = document.getElementById('icon')
 
 window.addEventListener('resize', canvas.init = function() {
 	canvas.width = window.innerWidth
 	canvas.height = window.innerHeight
-	canvas.style.background = '#eee'
+	canvas.style.background = 'transparent'
 
 	dc.font = '30px Arial'
 	dc.strokeStyle = 'rgba(0,128,255,0.5)'
 	dc.fillStyle = 'rgba(0, 0, 0, 0.5)'
 	dc.lineWidth = 3
 
-	dc.save()
-	dc.font = '50px Arial'
-	dc.textBaseline = 'middle'
-	dc.textAlign = 'center'
-	dc.fillText('STRIKE!', canvas.width / 2, canvas.height / 2)
-	dc.restore()
+	if (icon.complete) {
+		var imWidth = 200, imHeight = 200, lineHeight = 20
+		dc.drawImage(icon,
+			(canvas.width - imWidth) / 2, (canvas.height - imHeight - lineHeight) / 2,
+			imWidth, imHeight)
+		dc.save()
+		dc.font = '20px Arial'
+		dc.textBaseline = 'middle'
+		dc.textAlign = 'center'
+		dc.fillText('Your Mouse (Nezu) is charged with Electron',
+			canvas.width / 2, (canvas.height + imHeight) / 2)
+		dc.restore()
+	}
 })
 
-canvas.init()
+window.addEventListener('keydown', function(e) {
+	if (e.keyCode == 116 /* F5 */)
+		location.reload()
+	else if (e.keyCode == 123 /* F12 */)
+		mainWindow.openDevTools()
+})
+
+icon.addEventListener('load', canvas.init)
+icon.src = 'icon.svg'
 
 </script>
 <script>
