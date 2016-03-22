@@ -10,7 +10,7 @@
 		"exe:explorer.exe": ["extend", { }, "default", {
 			"←": ["shortcut", "MENU + LEFT"],
 			"→": ["shortcut", "MENU + RIGHT"],
-			"↑": ["shortcut", "BACK"]
+			"↑": ["shortcut", "MENU + UP"]
 		}],
 		"browser": {
 			"←": ["shortcut", "MENU + LEFT"],
@@ -29,7 +29,11 @@
 			"↙": ["shortcut", "CONTROL + SHIFT + I"]
 		}],
 		"exe:chrome.exe": ["extend", { }, "browser", {
-			"↙": ["shortcut", "CONTROL + SHIFT + J"]
+			"↙": ["shortcut", "CONTROL + SHIFT + J"],
+			"↓": ["extend",
+					["shortcut", "CONTROL + C"],
+					["shortcut", "CONTROL + B"]
+				]
 		}],
 		"exe:MicrosoftEdge.exe": ["extend", { }, "browser", {
 			"↙": ["shortcut", "F12"]
