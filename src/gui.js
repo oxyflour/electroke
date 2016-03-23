@@ -12,7 +12,6 @@ function createWindow() {
 	var window = new BrowserWindow({
 		width: 480,
 		height: 360,
-		minimizable: false,
 		title: 'ElecNez',
 		icon: __dirname + '/../res/icon.png',
 	})
@@ -55,6 +54,8 @@ app.on('ready', function() {
 			click(e) {
 				if (!mainWindow || mainWindow.closed)
 					mainWindow = createWindow()
+				else
+					mainWindow.show()
 			},
 		},
 		{
@@ -69,6 +70,8 @@ app.on('ready', function() {
 	sysTray.on('click', function() {
 		if (!mainWindow || mainWindow.closed)
 			mainWindow = createWindow()
+		else
+			mainWindow.show()
 	})
 })
 
