@@ -12,7 +12,7 @@ function createWindow() {
 	var window = new BrowserWindow({
 		width: 480,
 		height: 360,
-		title: 'ElecNez',
+		title: 'Electroke',
 		icon: __dirname + '/../res/icon.png',
 	})
 	window.on('closed', function() {
