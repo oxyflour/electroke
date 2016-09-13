@@ -67,8 +67,8 @@ icon.src = 'icon.svg'
 </script>
 <script>
 
-const ipcRenderer = require('electron').ipcRenderer,
-	mainWindow = require('remote').getCurrentWindow()
+const { ipcRenderer, remote } = require('electron'),
+	mainWindow = remote.getCurrentWindow()
 
 ipcRenderer.on('hook-mousedown', function onMouseDown(e, x, y, w) {
 	dc.offset = { x: canvas.width/2 - x, y: canvas.height/2 - y }

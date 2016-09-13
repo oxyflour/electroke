@@ -4,6 +4,7 @@
 
 #include <map>
 #include <vector>
+#include <mutex>
 
 #include <windows.h>
 #include <winuser.h>
@@ -26,6 +27,8 @@ using node::AtExit;
 using std::map;
 using std::vector;
 using std::string;
+using std::mutex;
+using std::lock_guard;
 
 using Nan::Utf8String;
 
@@ -44,6 +47,7 @@ struct HOOK_INFO {
 	uv_async_t async;
 	map<string, vector<CP>> callbacks;
 	vector<EVT> events;
+  mutex locker;
 } info;
 
 struct MOUSE_STATUS {
@@ -106,6 +110,7 @@ LRESULT CALLBACK HookProc(int nCode, WPARAM wParam, LPARAM lParam) {
 			(wParam == WM_RBUTTONDOWN || wParam == WM_RBUTTONUP ||
 				(wParam == WM_MOUSEMOVE && status.isDown))) {
 
+	  lock_guard<mutex> lk(info.locker);
 		info.events.push_back({ wParam, hs.pt });
 		uv_async_send(&info.async);
 
@@ -151,6 +156,7 @@ void fire(uv_async_t *handle) {
 		return;
 
 	// clone the events to keep thread-safety
+  lock_guard<mutex> lk(info.locker);
 	auto events = info.events;
 	info.events.clear();
 

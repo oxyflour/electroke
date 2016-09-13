@@ -1,7 +1,4 @@
-const app = require('app'),
-	BrowserWindow = require('browser-window'),
-	Menu = require('menu'),
-	Tray = require('tray'),
+const { app, BrowserWindow, Menu, Tray } = require('electron'),
 	hook = require('../bin/hook'),
 	config = require('./config')
 
