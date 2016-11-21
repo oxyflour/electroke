@@ -2,7 +2,7 @@ const fs = require('fs'),
 	hook = require('../bin/hook')
 
 function load() {
-	var configPath = process.env.USERPROFILE + '\\elecnez-config.json'
+	var configPath = process.env.USERPROFILE + '\\.electroke.json'
 		config = { }
 	try {
 		config = require(configPath)
