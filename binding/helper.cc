@@ -260,11 +260,10 @@ void simulateKey(const FunctionCallbackInfo<Value>& args) {
 		SimulateKey(vkCode, isDown ? 0 : KEYEVENTF_KEYUP);
 }
 
-void queryWindowAt(const FunctionCallbackInfo<Value>& args) {
-	auto x = args[0]->Int32Value();
-	auto y = args[1]->Int32Value();
+void queryWindowAtCursor(const FunctionCallbackInfo<Value>& args) {
+	POINT pt;
+	GetCursorPos(&pt);
 
-	POINT pt = { x, y };
 	char szBuf[256];
 	auto isolate = args.GetIsolate();
 	auto ret = Object::New(isolate);
@@ -291,7 +290,7 @@ void init(Local<Object> target) {
 	NODE_SET_METHOD(target, "simulateKey", simulateKey);
 	NODE_SET_METHOD(target, "simulateMouseKey", simulateMouseKey);
 	NODE_SET_METHOD(target, "simulateMouseMove", simulateMouseMove);
-	NODE_SET_METHOD(target, "queryWindowAt", queryWindowAt);
+	NODE_SET_METHOD(target, "queryWindowAtCursor", queryWindowAtCursor);
 }
 
 NODE_MODULE(helper, init);

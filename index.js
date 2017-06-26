@@ -14,7 +14,7 @@ hook.on('mousedown', function(x, y) {
 	gesture.add(x, y)
 
 	startPosition = { x, y }
-	startWindow = helper.queryWindowAt(x, y)
+	startWindow = helper.queryWindowAtCursor()
 
 	gui.sendMsg('hook-mousedown', x, y, startWindow)
 })
